@@ -1,0 +1,8 @@
+.application-container {
+  margin: 80px;
+}
+
+.application-flex {
+  display: flex;
+  align-items: center;
+}
