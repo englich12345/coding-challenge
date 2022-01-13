@@ -1,8 +1,15 @@
-.application-container {
+.container {
   margin: 80px;
 }
 
-.application-flex {
+.display-flex {
   display: flex;
+}
+
+.align-center{
   align-items: center;
+}
+
+.align-content-between {
+  justify-content: space-between;
 }

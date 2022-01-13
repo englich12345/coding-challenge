@@ -1,0 +1,32 @@
+.ReactVirtualized__Table {
+}
+
+.ReactVirtualized__Table__Grid {
+  outline: none;
+}
+
+.ReactVirtualized__Table__headerColumn {
+    color: navy;
+}
+
+.ReactVirtualized__Table__headerRow {
+    height: 50px !important;
+    background: #ecdbe1;
+    border: 1px solid gray;
+    padding-right: 0px !important;
+}
+
+.ReactVirtualized__Table__row {
+  border-right: 1px solid gray;
+  border-left: 1px solid gray;
+  border-bottom: 1px solid gray;
+}
+
+.ReactVirtualized__Table__rowColumn {
+}
+
+.ReactVirtualized__Table__sortableHeaderColumn {
+}
+
+.ReactVirtualized__Table__sortableHeaderIcon {
+}
