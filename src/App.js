@@ -7,8 +7,8 @@ const App = () => {
   return (
     <div className="App">
       <BrowserRouter>
-        <Suspense fallback>
-          <Route path="/" component={Application} />
+        <Suspense fallback="loading">
+          <Route path="" component={Application} />
         </Suspense>
       </BrowserRouter>
     </div>

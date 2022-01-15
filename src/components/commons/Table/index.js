@@ -13,21 +13,23 @@ import "./style.css"
 const CommonTable = ({
   tableData,
   tableHeader,
-  sortBy,
-  sortDirection,
   onSortList,
   tableDimension
 }) => {
   const defaultSortDirection = {}
-  const defaultSortBy = tableHeader.map(column=> {
+  const defaultSortBy = tableHeader.map(column => {
     if (column.isSort) {
       defaultSortDirection[column.dataKey] = column.sort
       return column.dataKey
     }
     return
   })
-  
-  const sortState = createTableMultiSort(onSortList, {
+
+  const sortState = createTableMultiSort(({sortBy, sortDirection}) => {
+    const sort = Object.keys(sortDirection)[0]
+    const direction = sortDirection[sort]
+    onSortList(sort, direction)
+  }, {
     defaultSortBy,
     defaultSortDirection
   });
@@ -37,7 +39,7 @@ const CommonTable = ({
       <>
         <span title={label}>{label}</span>
         {showSortIndicator && (
-          <SortIndicator sortDirection={sortState.sortDirection[dataKey]} />
+          <SortIndicator sortDirection={sortState.sortDirection[dataKey]} sortBy={sortState.sortBy[dataKey]} />
         )}
       </>
     );
@@ -53,8 +55,6 @@ const CommonTable = ({
             headerHeight={tableDimension.headerHeight || 20}
             rowHeight={tableDimension.rowHeight || 30}
             sort={sortState.sort}
-            sortBy={sortBy}
-            sortDirection={sortDirection}
             rowCount={tableData.length}
             rowGetter={({ index }) => tableData[index]}
           >
