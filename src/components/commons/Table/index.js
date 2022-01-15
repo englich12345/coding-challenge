@@ -18,7 +18,7 @@ const CommonTable = ({
 }) => {
   const defaultSortDirection = {}
   const defaultSortBy = tableHeader.map(column => {
-    if (column.isSort) {
+    if (!column.isSort) {
       defaultSortDirection[column.dataKey] = column.sort
       return column.dataKey
     }
@@ -64,6 +64,7 @@ const CommonTable = ({
                   key={column.label}
                   label={column.label}
                   dataKey={column.dataKey}
+                  disableSort={column.isSort}
                   width={column.width}
                   headerRenderer={headerRenderer}
                 />
