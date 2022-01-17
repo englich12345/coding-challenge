@@ -61,10 +61,10 @@ export const sortNumber = (list, direction, property, type) => {
       })
     case "date":
       return list.sort((a, b) => {
-        const dateAFormat = dateFormat(a[property]).split('/').reverse().join()
-        const dateBFormat = dateFormat(b[property]).split('/').reverse().join()
-        if (direction === "ASC") return dateAFormat - dateBFormat
-        return dateBFormat - dateAFormat
+        const dateA = new Date(a[property])
+        const dateB = new Date(b[property])
+        if (direction === "ASC") return dateA.getTime() - dateB.getTime()
+        return dateB.getTime() - dateA.getTime()
       })
   
     default:
