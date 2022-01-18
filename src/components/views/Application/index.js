@@ -9,7 +9,7 @@ import { getQueryParams, getSortObj, dateFormat, sortNumber } from '../../../uti
 import { get, capitalize, lowerCase } from 'lodash';
 
 const Application = () => {
-  const {urlParams, changeParams} = usePersistenceUrl()
+  const { urlParams, changeParams } = usePersistenceUrl()
   const dispatch = useDispatch()
   const [listCandidates, setListCandidates] = useState([])
   const candidate = useSelector(state => get(state, 'candidateReducer', []))
@@ -59,6 +59,27 @@ const Application = () => {
     dispatch(fetchAllCandidates())
   }, [])
 
+  const tableRender = () => {
+    if (candidate.loading) {
+      return <div className="text-center"><LoadingIcon width={100} height={100} /></div>
+    }
+    return (
+      <CommonTable
+        tableData={listCandidates}
+        tableHeader={tableHeader}
+        tableDimension={{
+          height: 700,
+          headerHeight: 20,
+          rowHeight: 50
+        }}
+        onSortList={(sortBy, sortDirection) => {
+          const sort = { sort: `${sortBy}-${sortDirection}` }
+          changeParams(sort)
+        }}
+      />
+    )
+  }
+
   return (
     <div className="container">
       <div className="display-flex align-content-between align-center">
@@ -70,23 +91,7 @@ const Application = () => {
         </span>
       </div>
       <div className="application-margin-top-20">
-        {
-          candidate.loading ? <div className="text-center"><LoadingIcon width={100} height={100} /></div> : (
-            <CommonTable
-              tableData={listCandidates}
-              tableHeader={tableHeader}
-              tableDimension={{
-                height: 700,
-                headerHeight: 20,
-                rowHeight: 50
-              }}
-              onSortList={(sortBy, sortDirection) => {
-                const sort = { sort: `${sortBy}-${sortDirection}` }
-                changeParams(sort)
-              }}
-            />
-          )
-        }
+        {tableRender()}
       </div>
     </div>
   )

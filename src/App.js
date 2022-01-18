@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { Route, BrowserRouter } from 'react-router-dom'
+import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom'
 
 const Application = React.lazy(() => import("./components/views/Application"))
 
@@ -8,7 +8,10 @@ const App = () => {
     <div className="App">
       <BrowserRouter>
         <Suspense fallback="loading">
-          <Route path="" component={Application} />
+          <Switch>
+          <Route path="/application" component={Application} />
+          <Redirect from="/" to="/application" />
+          </Switch>
         </Suspense>
       </BrowserRouter>
     </div>
