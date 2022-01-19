@@ -8,7 +8,7 @@ export const getQueryParams = () => {
   const searchStr = window.location.search.split('?')[1];
   const getQueryParamObj = eachQuery => {
     const qDataArr = eachQuery.split('=');
-    retData[qDataArr[0]] = qDataArr[1];
+    retData[qDataArr[0]] = decodeURI(qDataArr[1]);
   };
 
   if (searchStr.includes('&')) {
@@ -51,25 +51,25 @@ export const sortNumber = (list, direction, property, type) => {
   switch (type) {
     case "number":
       return list.sort((a, b) => {
-        if (direction === "ASC") return a[property] - b[property]
+        if (direction === "asc") return a[property] - b[property]
         return b[property] - a[property]
       })
     case "string":
       return list.sort((a, b) => {
-        if (direction === "ASC") return a[property].localeCompare(b[property])
+        if (direction === "asc") return a[property].localeCompare(b[property])
         return b[property].localeCompare(a[property])
       })
     case "date":
       return list.sort((a, b) => {
         const dateA = new Date(a[property])
         const dateB = new Date(b[property])
-        if (direction === "ASC") return dateA.getTime() - dateB.getTime()
+        if (direction === "asc") return dateA.getTime() - dateB.getTime()
         return dateB.getTime() - dateA.getTime()
       })
   
     default:
       return list.sort((a, b) => {
-        if (direction === "ASC") return a[property] - b[property]
+        if (direction === "asc") return a[property] - b[property]
         return b[property] - a[property]
       })
   }

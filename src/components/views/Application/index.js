@@ -9,6 +9,7 @@ import { getQueryParams, getSortObj, dateFormat, sortNumber } from '../../../uti
 import { get, capitalize, lowerCase } from 'lodash';
 
 const Application = () => {
+  const [errorCandidate, setErrorCandidate] = useState(null)
   const { urlParams, changeParams } = usePersistenceUrl()
   const dispatch = useDispatch()
   const [listCandidates, setListCandidates] = useState([])
@@ -17,7 +18,7 @@ const Application = () => {
   const { sortVal, sortOrder } = getSortObj(sort);
   const constructListCandidate = () => {
     let newListCandidate = get(candidate, 'data.data', [])
-    if (search) newListCandidate = newListCandidate.filter(data => data.name === search || data.status === search || data.position_applied === search)
+    if (search) newListCandidate = newListCandidate.filter(data => lowerCase(data.name).includes(search) || lowerCase(data.status).includes(search) || lowerCase(data.position_applied).includes(search))
     if (sort) {
       if (sortVal === "yearOfExperience") newListCandidate = sortNumber(newListCandidate, sortOrder, "year_of_experience", 'number')
       if (sortVal === "position") newListCandidate = sortNumber(newListCandidate, sortOrder, "position_applied", 'string')
@@ -27,31 +28,34 @@ const Application = () => {
       const currentDate = new Date()
       const birthday = new Date(item.birth_date)
       const ageOfCandidate = currentDate.getFullYear() - birthday.getFullYear()
-      return ({
-        name: item.name,
-        email: item.email,
-        age: ageOfCandidate,
-        yearOfExperience: item.year_of_experience,
-        position: item.position_applied,
-        dateOfApplication: dateFormat(item.application_date),
-        status: capitalize(item.status)
-      })
+      return [
+        item.name,
+        item.email,
+        ageOfCandidate,
+        item.year_of_experience,
+        item.position_applied,
+        dateFormat(item.application_date),
+        capitalize(item.status)]
     })
   }
 
   const tableHeader = [
-    { label: "Name", dataKey: "name", width: 300, isSort: true },
-    { label: "Email", dataKey: "email", width: 300, isSort: true },
-    { label: "Age", dataKey: "age", width: 100, isSort: true },
-    { label: "Year of Experience", dataKey: "yearOfExperience", sort: sortVal === "yearOfExperience" ? sortOrder : "ASC", width: 300, isSort: false },
-    { label: "Position applied", dataKey: "position", sort: sortVal === "position" ? sortOrder : "ASC", width: 200, isSort: false },
-    { label: "Applied", dataKey: "dateOfApplication", sort: sortVal === "dateOfApplication" ? sortOrder : "ASC", width: 200, isSort: false },
-    { label: "Status", dataKey: "status", width: 300, isSort: true },
+    { label: "Name" },
+    { label: "Email" },
+    { label: "Age" },
+    { label: "Year of Experience", sortField: "yearOfExperience", active: sortVal === "yearOfExperience" && sortOrder },
+    { label: "Position applied", sortField: "position", active: sortVal === "position" && sortOrder },
+    { label: "Applied", sortField: "dateOfApplication", active: sortVal === "dateOfApplication" && sortOrder },
+    { label: "Status" },
   ]
 
   useEffect(() => {
-    if (candidate.data) {
+    if (!candidate.loading && candidate.data) {
       setListCandidates(constructListCandidate())
+      setErrorCandidate(null)
+    } else if (!candidate.loading && candidate.error) {
+      console.log('candidate.error', candidate.error)
+      setErrorCandidate(candidate.error)
     }
   }, [candidate.loading, urlParams.search, urlParams.sort])
 
@@ -65,17 +69,11 @@ const Application = () => {
     }
     return (
       <CommonTable
+        tableHead={tableHeader}
         tableData={listCandidates}
-        tableHeader={tableHeader}
-        tableDimension={{
-          height: 700,
-          headerHeight: 20,
-          rowHeight: 50
-        }}
-        onSortList={(sortBy, sortDirection) => {
-          const sort = { sort: `${sortBy}-${sortDirection}` }
-          changeParams(sort)
-        }}
+        noFoundData="No found candidates"
+        error={errorCandidate}
+        handleSort={(sortField, order) => changeParams({ sort: `${sortField}-${order}` })}
       />
     )
   }
@@ -87,7 +85,7 @@ const Application = () => {
           <AccountIcon /> <span className="application-title">Applications</span>
         </span>
         <span>
-          <input placeholder="Filter by name" name="search" value={search || ""} onChange={e => changeParams({ search: lowerCase(e.target.value) })} />
+          <input placeholder="Filter by name / status/ position" name="search" value={search || ""} onChange={e => changeParams({ search: lowerCase(e.target.value) })} />
         </span>
       </div>
       <div className="application-margin-top-20">

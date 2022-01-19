@@ -1,32 +1,40 @@
-.ReactVirtualized__Table {
+#customers {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
 }
 
-.ReactVirtualized__Table__Grid {
-  outline: none;
+#customers td, #customers th {
+border: 1px solid #ddd;
+padding: 8px;
 }
 
-.ReactVirtualized__Table__headerColumn {
-    color: navy;
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+
+#customers th {
+padding-top: 12px;
+padding-bottom: 12px;
+text-align: left;
 }
 
-.ReactVirtualized__Table__headerRow {
-    height: 50px !important;
-    background: #ecdbe1;
-    border: 1px solid gray;
-    padding-right: 0px !important;
+.sort-opacity {
+    opacity: 0.3;
 }
 
-.ReactVirtualized__Table__row {
-  border-right: 1px solid gray;
-  border-left: 1px solid gray;
-  border-bottom: 1px solid gray;
+tbody {
+    display: block;
+    height: 500px;
+    overflow-x: hidden;
 }
-
-.ReactVirtualized__Table__rowColumn {
+thead, tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;/* even columns width , fix width of table too*/
 }
-
-.ReactVirtualized__Table__sortableHeaderColumn {
+thead {
+    width: calc( 100% - 1em )/* scrollbar is average 1em/16px width, remove it from thead width */
 }
-
-.ReactVirtualized__Table__sortableHeaderIcon {
+table {
+    width: 400px;
 }
