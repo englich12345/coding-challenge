@@ -49,7 +49,7 @@ export const dateFormat = (date: string) => {
   return `${day}/${month}/${year}`;
 };
 
-export const sortNumber = (
+export const sortArray = (
   list: IApplication[],
   direction: string,
   property: string,

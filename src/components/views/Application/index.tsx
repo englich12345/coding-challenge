@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import usePersistenceUrl from '../../customHook';
+import usePersistenceUrl from '../../../hooks';
 import './style.css';
 import { fetchAllCandidates } from '../../../redux/actions/index';
 import { AccountIcon, LoadingIcon } from '../../commons/Icons';
@@ -10,7 +10,7 @@ import {
   getQueryParams,
   getSortObj,
   dateFormat,
-  sortNumber,
+  sortArray,
 } from '../../../utils';
 import { get, capitalize, lowerCase } from 'lodash';
 
@@ -33,21 +33,21 @@ const Application = () => {
       );
     if (sort) {
       if (sortVal === 'yearOfExperience')
-        newListCandidate = sortNumber(
+        newListCandidate = sortArray(
           newListCandidate,
           sortOrder,
           'year_of_experience',
           'number'
         );
       if (sortVal === 'position')
-        newListCandidate = sortNumber(
+        newListCandidate = sortArray(
           newListCandidate,
           sortOrder,
           'position_applied',
           'string'
         );
       if (sortVal === 'dateOfApplication')
-        newListCandidate = sortNumber(
+        newListCandidate = sortArray(
           newListCandidate,
           sortOrder,
           'application_date',

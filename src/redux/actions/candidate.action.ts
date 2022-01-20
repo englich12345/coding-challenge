@@ -26,6 +26,8 @@ export const fetchAllCandidates = () => async (dispatch: Dispatch) => {
     await getCandidates()
       .then(response => {
         if (get(response, 'data.data')) {
+          // eslint-disable-next-line no-console
+          console.log('response.data', response.data);
           dispatchCandidates(dispatch, false, response.data, null);
         } else if (get(response, 'data.error')) {
           dispatchCandidates(

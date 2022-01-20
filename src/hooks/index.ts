@@ -1,5 +1,5 @@
 import { useHistory, useLocation } from 'react-router-dom';
-import { getQueryParams } from '../../utils';
+import { getQueryParams } from '../utils';
 
 const usePersistenceUrl = () => {
   const history = useHistory();
