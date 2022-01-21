@@ -1,0 +1,21 @@
+.notification-container {
+    font-size: 14px;
+    box-sizing: border-box;
+    position: fixed;
+    width: 300px;
+    background-color: #d9534f;
+    .notification-content{
+        color: white;
+        margin-left: 10px;
+        .notification-title{
+            margin-top: 0;
+        }
+    }
+}
+
+.top-right {
+    top: 12px;
+    right: 0px;
+    transition: transform .6s ease-in-out;
+    animation: toast-in-right .7s;
+}

@@ -3,7 +3,6 @@ export interface ITableProps {
   tableData: any;
   handleSort: (sortField: string, order: string) => void;
   noFoundData: string;
-  error: string;
 }
 
 export interface ITableHeadProps {

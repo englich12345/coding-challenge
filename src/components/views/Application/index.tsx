@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import usePersistenceUrl from '../../../hooks';
-import './style.css';
-import { fetchAllCandidates } from '../../../redux/actions/index';
+import './style.scss';
+import { fetchAllCandidates, notification } from '../../../redux/actions/index';
 import { AccountIcon, LoadingIcon } from '../../commons/Icons';
 import CommonTable from '../../commons/Table';
+import Toast from '../../commons/Notification';
 import { IApplication } from './Application';
 import {
   getQueryParams,
@@ -15,7 +16,6 @@ import {
 import { get, capitalize, lowerCase } from 'lodash';
 
 const Application = () => {
-  const [errorCandidate, setErrorCandidate] = useState('');
   const { urlParams, changeParams }: any = usePersistenceUrl();
   const dispatch = useDispatch();
   const [listCandidates, setListCandidates] = useState([]);
@@ -95,10 +95,15 @@ const Application = () => {
   useEffect(() => {
     if (!candidate.loading && candidate.data) {
       setListCandidates(constructListCandidate());
-      setErrorCandidate('');
     } else if (!candidate.loading && candidate.error) {
-      // console.log('candidate.error', candidate.error);
-      setErrorCandidate(candidate.error);
+      dispatch(
+        notification({
+          title: 'Error',
+          message: candidate.error.message,
+          isOpen: true,
+        })
+      );
+      setListCandidates([]);
     }
   }, [candidate.loading, urlParams.search, urlParams.sort]);
 
@@ -120,7 +125,6 @@ const Application = () => {
         tableData={listCandidates}
         tableHead={tableHeader}
         noFoundData="No found candidates"
-        error={errorCandidate}
         handleSort={(sortField, order) =>
           changeParams({ sort: `${sortField}-${order}` })
         }
@@ -130,6 +134,7 @@ const Application = () => {
 
   return (
     <div className="container">
+      <Toast />
       <div className="display-flex align-content-between align-center">
         <span className="display-flex align-center">
           <AccountIcon />{' '}
