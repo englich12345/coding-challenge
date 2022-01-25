@@ -12,9 +12,12 @@ const Toast = () => {
   useEffect(() => {
     if (isOpen) {
       setShowNotification(true);
-      setTimeout(() => {
+      const timeShowNoti = setTimeout(() => {
         setShowNotification(false);
       }, 5000);
+      return () => {
+        clearTimeout(timeShowNoti);
+      };
     }
   }, [isOpen]);
 

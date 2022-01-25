@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import usePersistenceUrl from '../../../hooks';
+import usePersistenceUrl from '../../../hooks/usePersistenceUrl';
+import { uniqBy } from 'lodash';
 import './style.scss';
 import { fetchAllCandidates, notification } from '../../../redux/actions/index';
-import { AccountIcon, LoadingIcon } from '../../commons/Icons';
-import CommonTable from '../../commons/Table';
-import Toast from '../../commons/Notification';
-import { IApplication } from './Application';
+import { LoadingIcon } from '../../commons/Icons';
+import { IApplication, IUseUrl, IUrlParams } from './Application';
+import ApplicationView from './Application.view';
 import {
   getQueryParams,
   getSortObj,
@@ -16,42 +16,54 @@ import {
 import { get, capitalize, lowerCase } from 'lodash';
 
 const Application = () => {
-  const { urlParams, changeParams }: any = usePersistenceUrl();
+  const { urlParams, changeParams }: IUseUrl = usePersistenceUrl();
   const dispatch = useDispatch();
   const [listCandidates, setListCandidates] = useState([]);
   const candidate = useSelector(state => get(state, 'candidateReducer', []));
-  const { sort, search }: any = getQueryParams();
+  const positionOptions = uniqBy(
+    get(candidate, 'data.data', []),
+    'position_applied'
+  )
+    .map(data => get(data, 'position_applied'))
+    .sort();
+  const statusOptions = uniqBy(get(candidate, 'data.data', []), 'status')
+    .map(data => get(data, 'status'))
+    .sort();
+  const { sort, search, status, position }: IUrlParams = getQueryParams();
   const { sortVal, sortOrder } = getSortObj(sort);
   const constructListCandidate = () => {
     let newListCandidate = get(candidate, 'data.data', []);
     if (search)
-      newListCandidate = newListCandidate.filter(
-        (data: IApplication) =>
-          lowerCase(data.name).includes(search) ||
-          lowerCase(data.status).includes(search) ||
-          lowerCase(data.position_applied).includes(search)
+      newListCandidate = newListCandidate.filter((data: IApplication) =>
+        lowerCase(data.name).includes(search)
       );
+    if (position)
+      newListCandidate = newListCandidate.filter(
+        (data: IApplication) => lowerCase(data.position_applied) === position
+      );
+    if (status) {
+      newListCandidate = newListCandidate.filter(
+        (data: IApplication) => lowerCase(data.status) === status
+      );
+    }
     if (sort) {
       if (sortVal === 'yearOfExperience')
         newListCandidate = sortArray(
           newListCandidate,
           sortOrder,
-          'year_of_experience',
-          'number'
+          'year_of_experience'
         );
       if (sortVal === 'position')
         newListCandidate = sortArray(
           newListCandidate,
           sortOrder,
-          'position_applied',
-          'string'
+          'position_applied'
         );
       if (sortVal === 'dateOfApplication')
         newListCandidate = sortArray(
           newListCandidate,
           sortOrder,
-          'application_date',
-          'date'
+          'application_date'
         );
     }
     return newListCandidate.map((item: IApplication) => {
@@ -70,28 +82,6 @@ const Application = () => {
     });
   };
 
-  const tableHeader = [
-    { label: 'Name', sortField: '', active: '' },
-    { label: 'Email', sortField: '', active: '' },
-    { label: 'Age', sortField: '', active: '' },
-    {
-      label: 'Year of Experience',
-      sortField: 'yearOfExperience',
-      active: sortVal === 'yearOfExperience' ? sortOrder : '',
-    },
-    {
-      label: 'Position applied',
-      sortField: 'position',
-      active: sortVal === 'position' ? sortOrder : '',
-    },
-    {
-      label: 'Applied',
-      sortField: 'dateOfApplication',
-      active: sortVal === 'dateOfApplication' ? sortOrder : '',
-    },
-    { label: 'Status', sortField: '', active: '' },
-  ];
-
   useEffect(() => {
     if (!candidate.loading && candidate.data) {
       setListCandidates(constructListCandidate());
@@ -105,52 +95,38 @@ const Application = () => {
       );
       setListCandidates([]);
     }
-  }, [candidate.loading, urlParams.search, urlParams.sort]);
+  }, [
+    candidate.loading,
+    urlParams.search,
+    urlParams.sort,
+    urlParams.position,
+    urlParams.status,
+  ]);
 
   useEffect(() => {
     dispatch(fetchAllCandidates());
   }, []);
 
-  const tableRender = () => {
-    if (candidate.loading) {
-      return (
-        <div className="text-center">
-          <LoadingIcon width={100} height={100} />
-        </div>
-      );
-    }
-
+  if (candidate.loading) {
     return (
-      <CommonTable
-        tableData={listCandidates}
-        tableHead={tableHeader}
-        noFoundData="No found candidates"
-        handleSort={(sortField, order) =>
-          changeParams({ sort: `${sortField}-${order}` })
-        }
-      />
+      <div className="text-center">
+        <LoadingIcon width={100} height={100} />
+      </div>
     );
-  };
+  }
 
   return (
-    <div className="container">
-      <Toast />
-      <div className="display-flex align-content-between align-center">
-        <span className="display-flex align-center">
-          <AccountIcon />{' '}
-          <span className="application-title">Applications</span>
-        </span>
-        <span>
-          <input
-            placeholder="Filter by name / status/ position"
-            name="search"
-            value={search || ''}
-            onChange={e => changeParams({ search: lowerCase(e.target.value) })}
-          />
-        </span>
-      </div>
-      <div className="application-margin-top-20">{tableRender()}</div>
-    </div>
+    <ApplicationView
+      search={search || ''}
+      position={position || ''}
+      status={status || ''}
+      changeParams={changeParams}
+      tableData={listCandidates}
+      sortVal={sortVal}
+      sortOrder={sortOrder}
+      positionOptions={positionOptions}
+      statusOptions={statusOptions}
+    />
   );
 };
 

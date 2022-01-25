@@ -1,6 +1,6 @@
 export interface ITableProps {
   tableHead: ITableHeadProps[];
-  tableData: any;
+  tableData: Array<Array<object>>;
   handleSort: (sortField: string, order: string) => void;
   noFoundData: string;
 }

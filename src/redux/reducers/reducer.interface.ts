@@ -5,6 +5,6 @@ export interface IAction {
   value: {
     loading: boolean;
     data: IListApplication;
-    error: any;
+    error: Error | null | unknown;
   };
 }

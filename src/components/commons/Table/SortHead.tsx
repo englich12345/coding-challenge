@@ -3,6 +3,7 @@ import { DownArrowIcon, UpArrowIcon } from '../Icons';
 import { ISortHead } from './TableProps';
 
 const SortHead: FC<ISortHead> = ({ sortField, handleSort, active, label }) => {
+  const sortHeaderLabel = active === 'asc' ? 'desc' : 'asc';
   return (
     <div>
       {sortField ? (
@@ -15,7 +16,12 @@ const SortHead: FC<ISortHead> = ({ sortField, handleSort, active, label }) => {
               className={active === 'desc' ? '' : 'sort-opacity'}
             />
           </span>
-          <span>{label}</span>
+          <span
+            onClick={() => handleSort(sortField, sortHeaderLabel)}
+            className="cursor-pointer"
+          >
+            {label}
+          </span>
         </>
       ) : (
         label

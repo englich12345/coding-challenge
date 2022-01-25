@@ -1,7 +1,8 @@
+import { isString, isNumber, isDate } from 'lodash';
 import { IApplication } from '../components/views/Application/Application';
 
 export const getQueryParams = () => {
-  const retData: any = {};
+  const retData: { [key: string]: string } = {};
 
   if (!window || !window.location || !window.location.search) {
     return retData;
@@ -23,7 +24,7 @@ export const getQueryParams = () => {
   return retData;
 };
 
-export const getSortObj = (activeSort: string) => {
+export const getSortObj = (activeSort: string | undefined) => {
   if (!activeSort) {
     return {
       sortVal: '',
@@ -50,34 +51,22 @@ export const dateFormat = (date: string) => {
 };
 
 export const sortArray = (
-  list: IApplication[],
+  list: Array<object>,
   direction: string,
-  property: string,
-  type: string
+  property: string
 ) => {
-  switch (type) {
-    case 'number':
-      return list.sort((a: any, b: any) => {
-        if (direction === 'asc') return a[property] - b[property];
-        return b[property] - a[property];
-      });
-    case 'string':
-      return list.sort((a: any, b: any) => {
-        if (direction === 'asc') return a[property].localeCompare(b[property]);
-        return b[property].localeCompare(a[property]);
-      });
-    case 'date':
-      return list.sort((a: any, b: any) => {
-        const dateA = new Date(a[property]);
-        const dateB = new Date(b[property]);
-        if (direction === 'asc') return dateA.getTime() - dateB.getTime();
-        return dateB.getTime() - dateA.getTime();
-      });
-
-    default:
-      return list.sort((a: any, b: any) => {
-        if (direction === 'asc') return a[property] - b[property];
-        return b[property] - a[property];
-      });
-  }
+  return list.sort((a: { [key: string]: any }, b: { [key: string]: any }) => {
+    if (isNumber(a[property])) {
+      if (direction === 'asc') return a[property] - b[property];
+      return b[property] - a[property];
+    } else if (isString(a[property])) {
+      if (direction === 'asc') return a[property].localeCompare(b[property]);
+      return b[property].localeCompare(a[property]);
+    } else if (isDate(a[property])) {
+      const dateA = new Date(a[property]);
+      const dateB = new Date(b[property]);
+      if (direction === 'asc') return dateA.getTime() - dateB.getTime();
+      return dateB.getTime() - dateA.getTime();
+    }
+  });
 };

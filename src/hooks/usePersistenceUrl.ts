@@ -6,7 +6,7 @@ const usePersistenceUrl = () => {
   const location = useLocation();
   const urlParams = getQueryParams();
 
-  const setUrlParam = (obj: any) => {
+  const setUrlParam = (obj: { [key: string]: string }) => {
     let urlString = '';
     Object.keys(obj).forEach((key, index) => {
       if (index !== 0) urlString += '&';
@@ -20,7 +20,7 @@ const usePersistenceUrl = () => {
     }
   };
 
-  const changeParams = (obj: any) => {
+  const changeParams = (obj: { [key: string]: string }) => {
     const params = Object.assign({}, getQueryParams(), obj);
     setUrlParam(params);
   };

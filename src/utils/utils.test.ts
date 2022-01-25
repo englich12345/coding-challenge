@@ -1,5 +1,5 @@
 import { getQueryParams, getSortObj, dateFormat, sortArray } from './index';
-
+import { get } from 'lodash';
 import { describe, expect, it } from '@jest/globals';
 
 describe('test get query params', () => {
@@ -66,52 +66,44 @@ describe('test sort array', () => {
     },
   ];
   it('sort number by year_of_experience', () => {
-    const sortAscYearExp = sortArray(
-      list,
-      'asc',
-      'year_of_experience',
-      'number'
-    );
-    expect(sortAscYearExp[0].year_of_experience).toBe(3);
-    expect(sortAscYearExp[sortAscYearExp.length - 1].year_of_experience).toBe(
-      15
-    );
+    const sortAscYearExp = sortArray(list, 'asc', 'year_of_experience');
+    expect(get(sortAscYearExp, '[0].year_of_experience')).toBe(3);
+    expect(
+      get(sortAscYearExp, `[${sortAscYearExp.length - 1}].year_of_experience`)
+    ).toBe(15);
 
-    const sortDescYearExp = sortArray(
-      list,
-      'desc',
-      'year_of_experience',
-      'number'
-    );
-    expect(sortDescYearExp[0].year_of_experience).toBe(15);
-    expect(sortDescYearExp[sortDescYearExp.length - 1].year_of_experience).toBe(
-      3
-    );
+    const sortDescYearExp = sortArray(list, 'desc', 'year_of_experience');
+    expect(get(sortDescYearExp, '[0].year_of_experience')).toBe(15);
+    expect(
+      get(sortDescYearExp, `[${sortDescYearExp.length - 1}].year_of_experience`)
+    ).toBe(3);
   });
 
   it('sort string by name', () => {
-    const sortAscName = sortArray(list, 'asc', 'name', 'string');
-    expect(sortAscName[0].name).toBe('Alvin Satterfield');
-    expect(sortAscName[sortAscName.length - 1].name).toBe('Rosalind Rath DDS');
+    const sortAscName = sortArray(list, 'asc', 'name');
+    expect(get(sortAscName, '[0].name')).toBe('Alvin Satterfield');
+    expect(get(sortAscName, `[${sortAscName.length - 1}].name`)).toBe(
+      'Rosalind Rath DDS'
+    );
 
-    const sortDescName = sortArray(list, 'desc', 'name', 'string');
-    expect(sortDescName[0].name).toBe('Rosalind Rath DDS');
-    expect(sortDescName[sortDescName.length - 1].name).toBe(
+    const sortDescName = sortArray(list, 'desc', 'name');
+    expect(get(sortDescName, '[0].name')).toBe('Rosalind Rath DDS');
+    expect(get(sortDescName, `[${sortDescName.length - 1}].name`)).toBe(
       'Alvin Satterfield'
     );
   });
 
   it('sort date by applied', () => {
-    const sortAscName = sortArray(list, 'asc', 'application_date', 'date');
-    expect(sortAscName[0].application_date).toBe('2017-11-18');
-    expect(sortAscName[sortAscName.length - 1].application_date).toBe(
-      '2018-07-02'
-    );
+    const sortAscName = sortArray(list, 'asc', 'application_date');
+    expect(get(sortAscName, '[0].application_date')).toBe('2017-11-18');
+    expect(
+      get(sortAscName, `[${sortAscName.length - 1}].application_date`)
+    ).toBe('2018-07-02');
 
-    const sortDescName = sortArray(list, 'desc', 'application_date', 'date');
-    expect(sortDescName[0].application_date).toBe('2018-07-02');
-    expect(sortDescName[sortDescName.length - 1].application_date).toBe(
-      '2017-11-18'
-    );
+    const sortDescName = sortArray(list, 'desc', 'application_date');
+    expect(get(sortDescName, '[0].application_date')).toBe('2018-07-02');
+    expect(
+      get(sortDescName, `[${sortDescName.length - 1}].application_date`)
+    ).toBe('2017-11-18');
   });
 });

@@ -29,10 +29,10 @@ const CommonTable: FC<ITableProps> = ({
         </thead>
         <tbody>
           {tableData.length > 0 &&
-            tableData.map((dataRow: any, index: number) => {
+            tableData.map((dataRow: Array<object>, index: number) => {
               return (
                 <tr key={index}>
-                  {dataRow.map((dataCell: any, idx: number) => (
+                  {dataRow.map((dataCell: object | string, idx: number) => (
                     <td key={idx}>{dataCell}</td>
                   ))}
                 </tr>

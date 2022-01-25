@@ -8,7 +8,7 @@ const dispatchCandidates = (
   dispatch: Dispatch,
   loading = false,
   data: IListApplication | null,
-  error?: any
+  error?: Error | null | unknown
 ) => {
   dispatch({
     type: GET_ALL_CANDIDATES,
