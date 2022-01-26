@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { ITableProps, ITableHeadProps } from './TableProps';
+import { ITableProps, ITableHeadProps } from './Table';
 import SortHead from './SortHead';
 import './style.scss';
 import { isEmpty } from 'lodash';

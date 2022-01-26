@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import { candidateReducer } from './reducers/candidate.reducer';
+import { applicationReducer } from './reducers/application.reducer';
 import { notificationReducer } from './reducers/notification.reducer';
 
 const rootReducer = combineReducers({
-  candidateReducer,
+  applicationReducer,
   notificationReducer,
 });
 export default rootReducer;

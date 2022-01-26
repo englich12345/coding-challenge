@@ -15,11 +15,17 @@ import {
 } from '../../../utils';
 import { get, capitalize, lowerCase } from 'lodash';
 
+const defaultParamsUrl = {
+  search: '',
+  position: '',
+  status: '',
+};
+
 const Application = () => {
   const { urlParams, changeParams }: IUseUrl = usePersistenceUrl();
   const dispatch = useDispatch();
   const [listCandidates, setListCandidates] = useState([]);
-  const candidate = useSelector(state => get(state, 'candidateReducer', []));
+  const candidate = useSelector(state => get(state, 'applicationReducer', []));
   const positionOptions = uniqBy(
     get(candidate, 'data.data', []),
     'position_applied'
@@ -29,7 +35,10 @@ const Application = () => {
   const statusOptions = uniqBy(get(candidate, 'data.data', []), 'status')
     .map(data => get(data, 'status'))
     .sort();
-  const { sort, search, status, position }: IUrlParams = getQueryParams();
+  const { sort, search, status, position }: IUrlParams = Object.assign(
+    { ...defaultParamsUrl },
+    getQueryParams()
+  );
   const { sortVal, sortOrder } = getSortObj(sort);
   const constructListCandidate = () => {
     let newListCandidate = get(candidate, 'data.data', []);
@@ -117,9 +126,9 @@ const Application = () => {
 
   return (
     <ApplicationView
-      search={search || ''}
-      position={position || ''}
-      status={status || ''}
+      search={search}
+      position={position}
+      status={status}
       changeParams={changeParams}
       tableData={listCandidates}
       sortVal={sortVal}

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { DownArrowIcon, UpArrowIcon } from '../Icons';
-import { ISortHead } from './TableProps';
+import { ISortHead } from './Table';
 
 const SortHead: FC<ISortHead> = ({ sortField, handleSort, active, label }) => {
   const sortHeaderLabel = active === 'asc' ? 'desc' : 'asc';

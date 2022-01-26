@@ -1,4 +1,4 @@
-import { fetchAllCandidates } from './candidate.action';
+import { fetchAllCandidates } from './application.action';
 import { notification } from './notification.action';
 
 export { fetchAllCandidates, notification };
