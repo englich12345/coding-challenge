@@ -47,6 +47,7 @@ module.exports = {
       "import/extensions": "off",
       "import/prefer-default-export": "off",
       "@typescript-eslint/explicit-function-return-type": "off",
-      "@typescript-eslint/no-var-requires": 2
+      "@typescript-eslint/no-var-requires": 2,
+      "no-unused-vars": "off",
     }
   };
