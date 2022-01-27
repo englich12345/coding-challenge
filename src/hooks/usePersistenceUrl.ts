@@ -10,7 +10,7 @@ const usePersistenceUrl = () => {
     let urlString = '';
     Object.keys(obj).forEach((key, index) => {
       if (index !== 0) urlString += '&';
-      urlString += `${key}=${obj[key]}`;
+      urlString += `${key}=${encodeURI(obj[key])}`;
     });
     if (history && location) {
       const newUrl = `?${urlString}`;

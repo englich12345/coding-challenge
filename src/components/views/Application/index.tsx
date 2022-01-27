@@ -44,7 +44,7 @@ const Application = () => {
     let newListCandidate = get(candidate, 'data.data', []);
     if (search)
       newListCandidate = newListCandidate.filter((data: IApplication) =>
-        lowerCase(data.name).includes(search)
+        lowerCase(data.name).includes(lowerCase(search))
       );
     if (position)
       newListCandidate = newListCandidate.filter(

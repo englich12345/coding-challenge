@@ -52,9 +52,7 @@ const ApplicationView: FC<IApplicationView> = ({
               placeholder="Filter by name"
               name="search"
               value={search}
-              onChange={e =>
-                changeParams({ search: lowerCase(e.target.value) })
-              }
+              onChange={e => changeParams({ search: e.target.value })}
             />
           </span>
           <span className="application-margin-10">
